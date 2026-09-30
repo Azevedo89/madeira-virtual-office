@@ -28,8 +28,9 @@ envio gera um email de ativação** que tem de ser confirmado uma vez.
 
 ## Por fazer
 
-- [ ] Comprar domínio e apontar para o alojamento
-- [ ] Trocar `info@madeiravirtualoffice.com` pelo email definitivo
+- [x] Comprar domínio: madeira-virtualoffice.com
+- [ ] Apontar DNS para o alojamento
+- [ ] Trocar `info@madeira-virtualoffice.com` pelo email definitivo
 - [ ] Definir modelo de pagamento
 - [ ] Morada real na secção "O local"
 
