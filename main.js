@@ -52,3 +52,26 @@
     }
   });
 })();
+
+// Revelação ao scroll — sem biblioteca, IntersectionObserver nativo.
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const alvos = document.querySelectorAll(
+    '.section h2, .section .lead, .card, .gallery figure, .steps li, #faq details, .split > *, .form, .section .muted'
+  );
+  const io = new IntersectionObserver((entradas) => {
+    for (const e of entradas) {
+      if (!e.isIntersecting) continue;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  }, { rootMargin: '0px 0px -12% 0px' });
+
+  alvos.forEach((el) => {
+    el.classList.add('reveal');
+    // escalona os irmãos diretos para entrarem em cascata
+    const irmaos = [...el.parentElement.children].indexOf(el);
+    el.style.transitionDelay = Math.min(irmaos, 4) * 80 + 'ms';
+    io.observe(el);
+  });
+})();
