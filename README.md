@@ -35,5 +35,5 @@ envio gera um email de ativação** que tem de ser confirmado uma vez.
 
 ## Créditos das fotografias
 
-Wikimedia Commons: Diego Delso, Virgílio Gomes, Holger Uwe Schmitt (CC BY-SA 4.0);
+Wikimedia Commons: Diego Delso, Virgílio Gomes, Holger Uwe Schmitt, Dietmar Rabich (CC BY-SA 4.0);
 Michael Gaylard (CC BY 2.0). A atribuição no rodapé é obrigatória pelas licenças.
