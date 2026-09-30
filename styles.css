@@ -19,35 +19,34 @@ html{scroll-behavior:smooth;scroll-padding-top:90px}
 
 /* preloader */
 #preloader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden}
-#preloader .pane{position:absolute;left:0;width:100%;height:50.2%;
+#preloader .pane{position:absolute;left:0;width:100%;height:50%;
   background:linear-gradient(160deg,#0a1c38,#12325c 60%,#0c2242);background-size:100vw 100vh;
-  transition:transform .8s cubic-bezier(.76,0,.24,1)}
-.pane-top{top:0;background-position:top center;box-shadow:0 1px 0 #c9a15a55}
-.pane-bottom{bottom:0;background-position:bottom center;box-shadow:0 -1px 0 #c9a15a55}
-.pl-content{position:relative;display:grid;justify-items:center;gap:26px;padding:0 24px;
-  transition:opacity .4s ease,transform .5s ease}
+  transition:transform .75s cubic-bezier(.76,0,.24,1)}
+.pane-top{top:0;background-position:top center}
+.pane-bottom{bottom:0;background-position:bottom center}
+.pl-content{position:relative;display:grid;justify-items:center;gap:22px;padding:0 24px;
+  transition:opacity .35s ease,transform .45s ease}
 
-/* logo a branco com um varrimento dourado por cima, recortado pela forma do logo */
-.pl-logo{position:relative;width:min(340px,68vw);aspect-ratio:834/529}
-.pl-logo img{width:100%;filter:brightness(0) invert(1);opacity:.28}
-.pl-shine{position:absolute;inset:0;
+/* logótipo a branco sólido, com um brilho dourado a atravessá-lo */
+.pl-logo{position:relative;width:min(210px,46vw);aspect-ratio:834/529}
+.pl-logo img{width:100%;filter:brightness(0) invert(1)}
+.pl-shine{position:absolute;inset:0;pointer-events:none;
   -webkit-mask:url("images/logo.png") center/contain no-repeat;
   mask:url("images/logo.png") center/contain no-repeat;
-  background:linear-gradient(100deg,#ffffff00 38%,#fff 47%,#c9a15a 53%,#ffffff00 64%);
-  background-size:260% 100%;background-repeat:no-repeat;
-  animation:shine 2.4s cubic-bezier(.5,0,.4,1) infinite}
-@keyframes shine{0%{background-position:170% 0}55%,100%{background-position:-70% 0}}
+  background:linear-gradient(105deg,#e3c88a00 40%,#e3c88a 50%,#e3c88a00 60%);
+  background-size:300% 100%;background-repeat:no-repeat;
+  animation:shine 2.6s cubic-bezier(.45,0,.35,1) infinite}
+@keyframes shine{0%{background-position:190% 0}60%,100%{background-position:-90% 0}}
 
-.pl-bar{width:min(230px,60vw);height:2px;background:#ffffff26;border-radius:2px;overflow:hidden}
-.pl-bar span{display:block;height:100%;width:0;border-radius:2px;
-  background:linear-gradient(90deg,#a8823c,#c9a15a,#e3c88a)}
-.pl-pct{margin:0;font-size:.72rem;letter-spacing:.34em;color:#c9a15a;font-variant-numeric:tabular-nums}
+.pl-bar{width:min(180px,48vw);height:2px;background:#ffffff1f;border-radius:2px;overflow:hidden}
+.pl-bar span{display:block;height:100%;width:0;border-radius:2px;background:var(--gold)}
+.pl-pct{margin:0;font-size:.64rem;letter-spacing:.3em;color:#c9a15ab0;font-variant-numeric:tabular-nums}
 
 body:not(.loaded){overflow:hidden}
 body.loaded .pane-top{transform:translateY(-100%)}
 body.loaded .pane-bottom{transform:translateY(100%)}
-body.loaded .pl-content{opacity:0;transform:translateY(-14px);transition-duration:.3s}
-body.loaded #preloader{visibility:hidden;transition:visibility 0s .8s}
+body.loaded .pl-content{opacity:0;transform:translateY(-10px);transition-duration:.25s}
+body.loaded #preloader{visibility:hidden;transition:visibility 0s .75s}
 @media (prefers-reduced-motion:reduce){
   .pl-shine{animation:none;background-position:50% 0}
   #preloader .pane,.pl-content{transition-duration:.2s}

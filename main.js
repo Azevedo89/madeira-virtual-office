@@ -5,7 +5,7 @@
   if (!pre) return;
   const bar = pre.querySelector('.pl-bar span');
   const pct = pre.querySelector('.pl-pct');
-  const MIN = 2200, MAX = 8000, t0 = performance.now();
+  const MIN = 1900, MAX = 8000, t0 = performance.now();
   let ready = false;
 
   const finish = () => { ready = true; };
