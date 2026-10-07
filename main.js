@@ -1,3 +1,12 @@
+// Recarregar devolve sempre o topo: o browser restaura a posição anterior e o
+// pré-loader só liberta o scroll depois, deixando o visitante a meio da página.
+// Uma âncora escrita no link (#servicos) continua a valer na primeira visita.
+history.scrollRestoration = 'manual';
+const recarregou = performance.getEntriesByType('navigation')[0]?.type === 'reload';
+if (recarregou && location.hash) history.replaceState(null, '', location.pathname);
+const aoTopo = () => { if (!location.hash) scrollTo(0, 0); };
+aoTopo();
+
 // Preloader: barra determinada que só chega a 100% quando a página carrega,
 // com um mínimo visível para a animação não piscar em ligações rápidas.
 (() => {
@@ -17,7 +26,10 @@
     const p = Math.min(e * 100, ready ? 100 : 92);
     bar.style.width = p + '%';
     pct.textContent = Math.round(p) + '%';
-    if (ready && e >= 1) return document.body.classList.add('loaded');
+    if (ready && e >= 1) {
+      aoTopo(); // o scroll estava travado pelo pré-loader; só agora pega
+      return document.body.classList.add('loaded');
+    }
     requestAnimationFrame(tick);
   })();
 })();
