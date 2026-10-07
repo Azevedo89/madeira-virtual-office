@@ -15,9 +15,33 @@ class Analisador(html.parser.HTMLParser):
     def __init__(self):
         super().__init__()
         self.pilha, self.ids, self.refs, self.ficheiros = [], set(), [], []
+        self.h1, self.titulo, self.metas, self.lang, self.canonico = 0, False, set(), None, False
+        self.campos, self.dentro_de_label = [], 0
+
+    def handle_data(self, dados):
+        if self.pilha and self.pilha[-1][0] == 'title' and dados.strip():
+            self.titulo = True
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        linha = self.getpos()[0]
+        if tag == 'html':
+            self.lang = a.get('lang')
+        elif tag == 'h1':
+            self.h1 += 1
+        elif tag == 'meta' and (n := a.get('name')):
+            self.metas.add(n)
+        elif tag == 'link' and a.get('rel') == 'canonical':
+            self.canonico = True
+        elif tag == 'img' and 'alt' not in a:
+            erros.append(f'{self.nome}: <img> na linha {linha} sem atributo alt')
+        elif tag == 'label':
+            self.dentro_de_label += 1
+        elif (tag in ('input', 'select', 'textarea') and a.get('type') != 'hidden'
+              and a.get('aria-hidden') != 'true' and 'display:none' not in a.get('style', '')):
+            self.campos.append((tag, linha, self.dentro_de_label > 0, a.get('id')))
+        if a.get('target') == '_blank' and 'noopener' not in a.get('rel', ''):
+            erros.append(f'{self.nome}: link na linha {linha} abre noutro separador sem rel="noopener"')
         if (i := a.get('id')):
             self.ids.add(i)
         for chave in ('href', 'src'):
@@ -31,6 +55,8 @@ class Analisador(html.parser.HTMLParser):
             self.pilha.append((tag, self.getpos()[0]))
 
     def handle_endtag(self, tag):
+        if tag == 'label':
+            self.dentro_de_label -= 1
         while self.pilha and self.pilha[-1][0] in OPCIONAIS and self.pilha[-1][0] != tag:
             self.pilha.pop()
         if self.pilha and self.pilha[-1][0] == tag:
@@ -54,6 +80,21 @@ for pagina in sorted(RAIZ.rglob('*.html')):
     for f in p.ficheiros:
         if not (pagina.parent / f).exists():
             erros.append(f'{rel}: referencia {f}, que não existe')
+
+    # qualidade: o que uma página desta precisa para ser encontrada e usável
+    if not p.lang:
+        erros.append(f'{rel}: <html> sem atributo lang')
+    if not p.titulo:
+        erros.append(f'{rel}: sem <title> preenchido')
+    if 'description' not in p.metas:
+        erros.append(f'{rel}: sem <meta name="description">')
+    if not p.canonico:
+        erros.append(f'{rel}: sem <link rel="canonical">')
+    if p.h1 != 1:
+        erros.append(f'{rel}: tem {p.h1} <h1>, devia ter exatamente 1')
+    for tag, linha, em_label, ident in p.campos:
+        if not em_label and not (ident and f'for="{ident}"' in pagina.read_text()):
+            erros.append(f'{rel}: <{tag}> na linha {linha} sem rótulo associado')
 
 for js in sorted(RAIZ.rglob('*.js')):
     r = subprocess.run(['node', '--check', str(js)], capture_output=True, text=True)
