@@ -45,7 +45,7 @@
       msg.textContent = 'Recebido. Respondemos no mesmo dia útil.';
       msg.className = 'form-msg ok';
     } catch {
-      msg.innerHTML = 'Não foi possível enviar. Escreva para <a href="mailto:info@madeiravirtualoffice.com">info@madeiravirtualoffice.com</a>.';
+      msg.innerHTML = 'Não foi possível enviar. Escreva para <a href="mailto:info@madeira-virtualoffice.com">info@madeira-virtualoffice.com</a>.';
       msg.className = 'form-msg err';
     } finally {
       btn.disabled = false;
@@ -57,7 +57,7 @@
 (() => {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const alvos = document.querySelectorAll(
-    '.section h2, .section .lead, .card, .gallery figure, .steps li, #faq details, .split > *, .form, .section .muted'
+    '.section h2, .section .lead, .card, .figs li, .gallery figure, .steps li, #faq details, .split > *, .form, .section .muted'
   );
   const io = new IntersectionObserver((entradas) => {
     for (const e of entradas) {
