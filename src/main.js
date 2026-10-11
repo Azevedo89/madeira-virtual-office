@@ -1,3 +1,6 @@
+// Vercel Analytics: sem cookies e sem dados pessoais.
+import { inject } from '@vercel/analytics';
+
 /**
  * Devolve o topo ao recarregar, em vez de repor a posição anterior.
  * Uma âncora escrita no link (#faq) continua a valer na primeira visita.
@@ -185,6 +188,7 @@ export function initReveal(doc) {
       '.step',
       '.faq-list details',
       '.contact-box',
+      '.form',
       '.hero-actions',
     ].join(','),
   );
@@ -274,10 +278,58 @@ export function initCarousels(doc) {
   }
 }
 
+/**
+ * Envio do formulário sem back-end, via FormSubmit. O envio é assíncrono para
+ * o visitante não sair da página; se falhar, mostra o email para ele não
+ * ficar sem caminho.
+ * @param {Document} doc
+ */
+export function initForm(doc) {
+  const form = /** @type {HTMLFormElement | null} */ (doc.getElementById('contact-form'));
+  if (!form) return;
+  const aviso = form.querySelector('.form-msg');
+  const botao = /** @type {HTMLButtonElement | null} */ (form.querySelector('button'));
+
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    if (botao) botao.disabled = true;
+    if (aviso) {
+      aviso.textContent = 'Sending…';
+      aviso.className = 'form-msg';
+    }
+    try {
+      const r = await fetch(form.action, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(form),
+      });
+      if (!r.ok) throw new Error(String(r.status));
+      form.reset();
+      if (aviso) {
+        aviso.textContent = 'Thank you. We will reply within one working day.';
+        aviso.className = 'form-msg is-ok';
+      }
+    } catch {
+      if (aviso) {
+        aviso.innerHTML =
+          'Could not send. Please write to ' +
+          '<a href="mailto:info@madeiravirtualoffice.com">info@madeiravirtualoffice.com</a>.';
+        aviso.className = 'form-msg is-err';
+      }
+    } finally {
+      if (botao) botao.disabled = false;
+    }
+  });
+}
+
 if (!import.meta.env?.VITEST) {
   initScrollTop();
   initNav(document);
   initPreloader(document);
   initReveal(document);
   initCarousels(document);
+  initForm(document);
+  // o script do analytics só existe quando servido pela Vercel; em local dava
+  // 404 e um erro de consola que o Lighthouse penaliza
+  if (!['localhost', '127.0.0.1', ''].includes(location.hostname)) inject();
 }

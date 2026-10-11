@@ -74,7 +74,12 @@ no JSON-LD. Mudar num sítio obriga a mudar no outro.
 
 - [x] Domínio: madeiravirtualoffice.com (sem hífen)
 - [ ] Apontar DNS para a Vercel
-- [ ] Confirmar que a caixa info@madeiravirtualoffice.com recebe
+- [ ] **Confirmar que a caixa info@madeiravirtualoffice.com recebe** — o formulário
+      usa FormSubmit e o primeiro envio gera um email de ativação que tem de ser
+      confirmado uma vez. Até lá o formulário não entrega nada.
+- [ ] Ligar o Vercel Analytics no painel do projeto
+- [ ] Identificação legal: denominação social, NIPC, política de privacidade e
+      Livro de Reclamações eletrónico
 - [ ] Substituir a fotografia provisória por fotografia licenciada
 
 ## Fotografias

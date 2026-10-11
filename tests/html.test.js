@@ -52,7 +52,7 @@ describe('acessibilidade', () => {
       (c) =>
         c.getAttribute('type') !== 'hidden' &&
         c.getAttribute('aria-hidden') !== 'true' &&
-        !(c.getAttribute('style') ?? '').includes('display:none'),
+        !(c.getAttribute('style') ?? '').replace(/\s/g, '').includes('display:none'),
     );
     const soltos = campos.filter(
       (c) => !c.closest('label') && !doc.querySelector(`label[for="${c.id}"]`),
