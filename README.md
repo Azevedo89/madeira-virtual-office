@@ -79,7 +79,13 @@ no JSON-LD. Mudar num sítio obriga a mudar no outro.
 
 ## Fotografias
 
-**Provisórias.** O hero é do Caniçal, de Asurnipal, CC BY-SA 4.0, cortado e
-redimensionado — a atribuição no rodapé é obrigatória pela licença. A
-`madeira-flower.jpg` veio da entrega do designer **sem indicação de autor nem
-de licença**, e tem de ser substituída ou licenciada antes de ir para o ar.
+**Provisórias, mas todas com licença e autor conhecidos.**
+
+| Ficheiro                      | Autor              | Licença      |
+| ----------------------------- | ------------------ | ------------ |
+| `hero-funchal.webp`, `og.jpg` | Bengt Nyman        | CC BY 2.0    |
+| `funchal-baixa.webp`          | Holger Uwe Schmitt | CC BY-SA 4.0 |
+
+Ambas cortadas e redimensionadas. A atribuição no rodapé é obrigatória pelas
+licenças. A `madeira-flower.jpg`, que vinha da entrega do designer sem autor
+nem licença, foi removida.

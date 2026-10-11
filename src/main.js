@@ -135,9 +135,11 @@ export function initReveal(doc) {
       '.section-title',
       '.section-lead',
       '.micro',
+      '.hero-points li',
       '.feature',
       '.price-card',
       '.network-card',
+      '.carousel-ui',
       '.network-note',
       '.editorial-grid > *',
       '.step',
@@ -166,9 +168,76 @@ export function initReveal(doc) {
   }
 }
 
+/**
+ * Liga os botões e os pontos de um carrossel. O arrastar já funciona sem JS,
+ * por scroll-snap; isto é só o extra, e só aparece quando há mais do que um
+ * ecrã de conteúdo para percorrer.
+ * @param {Document} doc
+ */
+export function initCarousels(doc) {
+  for (const caixa of doc.querySelectorAll('[data-carousel]')) {
+    const via = /** @type {HTMLElement | null} */ (caixa.querySelector('.carousel-track'));
+    const anterior = /** @type {HTMLButtonElement | null} */ (
+      caixa.querySelector('[data-carousel-prev]')
+    );
+    const seguinte = /** @type {HTMLButtonElement | null} */ (
+      caixa.querySelector('[data-carousel-next]')
+    );
+    const pontos = caixa.querySelector('[data-carousel-dots]');
+    if (!via) continue;
+
+    const itens = /** @type {HTMLElement[]} */ ([...via.children]);
+    const transborda = () => via.scrollWidth - via.clientWidth > 4;
+
+    /** @param {number} i */
+    const irPara = (i) => {
+      const alvo = itens[Math.max(0, Math.min(i, itens.length - 1))];
+      if (alvo) via.scrollTo({ left: alvo.offsetLeft - via.offsetLeft });
+    };
+    const atual = () => {
+      let melhor = 0;
+      let menor = Infinity;
+      itens.forEach((el, i) => {
+        const d = Math.abs(el.offsetLeft - via.offsetLeft - via.scrollLeft);
+        if (d < menor) {
+          menor = d;
+          melhor = i;
+        }
+      });
+      return melhor;
+    };
+
+    if (pontos && !pontos.childElementCount) {
+      itens.forEach((_, i) => {
+        const b = doc.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', `Go to item ${i + 1}`);
+        b.addEventListener('click', () => irPara(i));
+        pontos.append(b);
+      });
+    }
+    anterior?.addEventListener('click', () => irPara(atual() - 1));
+    seguinte?.addEventListener('click', () => irPara(atual() + 1));
+
+    const sincronizar = () => {
+      caixa.classList.toggle('is-ativo', transborda());
+      const i = atual();
+      if (anterior) anterior.disabled = via.scrollLeft <= 2;
+      if (seguinte) seguinte.disabled = via.scrollLeft + via.clientWidth >= via.scrollWidth - 2;
+      pontos
+        ?.querySelectorAll('button')
+        .forEach((b, j) => b.setAttribute('aria-current', String(j === i)));
+    };
+    via.addEventListener('scroll', sincronizar, { passive: true });
+    doc.defaultView?.addEventListener('resize', sincronizar);
+    sincronizar();
+  }
+}
+
 if (!import.meta.env?.VITEST) {
   initScrollTop();
   initNav(document);
   initPreloader(document);
   initReveal(document);
+  initCarousels(document);
 }

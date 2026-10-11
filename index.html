@@ -20,10 +20,10 @@
       property="og:description"
       content="A professional business address in Funchal, Madeira, with mail handling, scanning, coworking and practical local connections."
     />
-    <meta property="og:image" content="https://madeiravirtualoffice.com/images/hero-canical.jpg" />
+    <meta property="og:image" content="https://madeiravirtualoffice.com/images/og.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#071f3b" />
-    <link rel="preload" as="image" href="/images/hero-canical.jpg" />
+    <link rel="preload" as="image" href="/images/hero-funchal.webp" />
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
@@ -51,6 +51,7 @@
         />
       </a>
       <nav class="main-nav" id="main-nav" aria-label="Main">
+        <a href="#top">Home</a>
         <a href="#service">The service</a>
         <a href="#connections">Connections</a>
         <a href="#faq">FAQ</a>
@@ -68,18 +69,15 @@
     </header>
     <main id="top">
       <section class="hero">
-        <div class="hero-image">
-          <div class="hero-image-label">Madeira · Caniçal · Business &amp; Industry</div>
-        </div>
+        <div class="hero-image"></div>
         <div class="wrap hero-copy">
           <div class="hero-grid">
             <div>
               <div class="eyebrow">MADEIRA VIRTUAL OFFICE</div>
               <h1>Your business.<br /><span>Our address.</span><br />Madeira.</h1>
               <p class="hero-lead">
-                A professional business address in Funchal for companies, entrepreneurs, investors
-                and international businesses seeking a credible local presence and a practical
-                foundation for operating in Madeira.
+                A real business address in Funchal, for companies and entrepreneurs who need a
+                credible presence in Madeira.
               </p>
               <div class="hero-actions">
                 <a class="btn gold" href="#contact">Request information</a
@@ -87,12 +85,12 @@
               </div>
             </div>
             <aside class="hero-side">
-              <div class="label">A professional local foundation</div>
-              <p>
-                Establish a credible Madeira presence with a real Funchal address, practical
-                business support and access to relevant local connections as your requirements
-                develop.
-              </p>
+              <ul class="hero-points">
+                <li><strong>Funchal</strong><span>A real street address, not a PO box</span></li>
+                <li><strong>Daily</strong><span>Mail checked, scanned and notified</span></li>
+                <li><strong>EU</strong><span>Portuguese territory, Lisbon time zone</span></li>
+                <li><strong>One day</strong><span>Coworking each month, included</span></li>
+              </ul>
             </aside>
           </div>
         </div>
@@ -125,11 +123,11 @@
                 </div>
                 <div class="micro">
                   <strong>Practical local support</strong
-                  ><span>Mail, scanning, workspace and a professional local point of contact.</span>
+                  ><span>Mail, scanning, workspace, a local contact.</span>
                 </div>
                 <div class="micro">
                   <strong>Built to grow with you</strong
-                  ><span>Additional services when your business needs them.</span>
+                  ><span>Add more as the business grows.</span>
                 </div>
               </div>
             </div>
@@ -142,10 +140,7 @@
             <div>
               <div class="eyebrow">THE MV OFFICE MEMBERSHIP</div>
               <h2 class="section-title">A professional foundation for your Madeira presence.</h2>
-              <p class="section-lead">
-                One clearly defined membership designed around the practical requirements of
-                establishing and maintaining a professional local business presence.
-              </p>
+              <p class="section-lead">One membership. Everything below is included.</p>
             </div>
           </div>
           <div class="offer-body">
@@ -241,49 +236,57 @@
               <h2 class="section-title">Beyond the address.</h2>
             </div>
             <p class="section-lead">
-              The address establishes your local presence. From there, your requirements may extend
-              into professional, property and operational services. MV OFFICE can facilitate
-              relevant local introductions, helping international clients access established
-              businesses and specialist expertise in Madeira.
+              The address is the starting point. From there we can introduce you to the local
+              professionals your business actually needs.
             </p>
           </div>
-          <div class="network-grid">
-            <div class="network-card">
-              <div class="num">PROFESSIONAL</div>
-              <h3>Accountancy &amp; business</h3>
-              <p>
-                Accountants, tax specialists, business consultants and other professional services.
-              </p>
+          <div class="carousel" data-carousel>
+            <div class="carousel-track network-grid" role="group" aria-label="Local connections">
+              <div class="network-card">
+                <div class="num">PROFESSIONAL</div>
+                <h3>Accountancy &amp; business</h3>
+                <p>
+                  Accountants, tax specialists, business consultants and other professional
+                  services.
+                </p>
+              </div>
+              <div class="network-card">
+                <div class="num">LEGAL</div>
+                <h3>Legal &amp; corporate</h3>
+                <p>
+                  Where appropriate, introductions to solicitors and other specialist professional
+                  advisers.
+                </p>
+              </div>
+              <div class="network-card">
+                <div class="num">PROPERTY</div>
+                <h3>Property &amp; AL</h3>
+                <p>
+                  Property management, Alojamento Local support and other property-related services.
+                </p>
+              </div>
+              <div class="network-card">
+                <div class="num">PRACTICAL</div>
+                <h3>Property care</h3>
+                <p>
+                  Cleaning, gardening, maintenance and other practical services around your Madeira
+                  requirements.
+                </p>
+              </div>
             </div>
-            <div class="network-card">
-              <div class="num">LEGAL</div>
-              <h3>Legal &amp; corporate</h3>
-              <p>
-                Where appropriate, introductions to solicitors and other specialist professional
-                advisers.
-              </p>
-            </div>
-            <div class="network-card">
-              <div class="num">PROPERTY</div>
-              <h3>Property &amp; AL</h3>
-              <p>
-                Property management, Alojamento Local support and other property-related services.
-              </p>
-            </div>
-            <div class="network-card">
-              <div class="num">PRACTICAL</div>
-              <h3>Property care</h3>
-              <p>
-                Cleaning, gardening, maintenance and other practical services around your Madeira
-                requirements.
-              </p>
+            <div class="carousel-ui">
+              <button class="carousel-btn" type="button" data-carousel-prev aria-label="Previous">
+                ‹
+              </button>
+              <div class="carousel-dots" data-carousel-dots></div>
+              <button class="carousel-btn" type="button" data-carousel-next aria-label="Next">
+                ›
+              </button>
             </div>
           </div>
           <p class="network-note">
-            MV OFFICE provides the professional address and the first layer of local support. As
-            requirements develop, relevant introductions can extend your access to established
-            independent businesses and professional specialists across Madeira. Specialist services
-            are contracted directly with the selected provider.
+            MV OFFICE provides the address and the first layer of local support. Specialist services
+            are contracted directly with the provider you choose.
           </p>
         </div>
       </section>
@@ -294,15 +297,7 @@
             <h2>A local presence.<br /><span>An international outlook.</span></h2>
             <p>
               Madeira is an autonomous region of Portugal and part of the European Union, with
-              Funchal at the centre of the island’s commercial and administrative activity. Its
-              business environment supports local and international activity through professional
-              services, infrastructure, telecommunications and specialist providers.
-            </p>
-            <p>
-              For entrepreneurs, investors and international companies, establishing a local
-              presence can be a practical first step in developing relationships, coordinating
-              requirements and understanding the market. MV OFFICE provides that first layer: a
-              professional Funchal address supported by a wider network of local connections.
+              Funchal at the centre of the island’s commercial activity.
             </p>
             <p class="editorial-note">
               A credible starting point for businesses that intend to operate, invest or develop
@@ -310,8 +305,8 @@
             </p>
           </div>
           <figure class="editorial-image">
-            <img src="/images/madeira-flower.jpg" alt="Madeira landscape and tropical flora" />
-            <figcaption>Madeira · Funchal</figcaption>
+            <img src="/images/funchal-baixa.webp" alt="The cathedral and old town of Funchal" />
+            <figcaption>Baixa do Funchal · Sé</figcaption>
           </figure>
         </div>
       </section>
@@ -319,34 +314,22 @@
         <div class="wrap">
           <div class="eyebrow">ESTABLISH · OPERATE · DEVELOP</div>
           <h2 class="section-title">A structured start in Madeira.</h2>
-          <p class="section-lead">
-            The process is designed to be clear from the outset, giving you a professional local
-            presence first and the flexibility to develop from there.
-          </p>
+          <p class="section-lead">A professional presence first, room to grow after.</p>
           <div class="steps">
             <div class="step">
               <div class="step-number">ESTABLISH</div>
               <h3>Set your local presence</h3>
-              <p>
-                Choose the MV OFFICE membership and establish your professional business address in
-                Funchal, subject to the applicable requirements.
-              </p>
+              <p>Choose the membership and start using your Funchal address.</p>
             </div>
             <div class="step">
               <div class="step-number">OPERATE</div>
               <h3>Manage your correspondence</h3>
-              <p>
-                Use the address for your business requirements, with daily mail handling,
-                notifications, scanning and your included coworking access.
-              </p>
+              <p>Daily mail handling, notifications, scanning and your coworking day.</p>
             </div>
             <div class="step">
               <div class="step-number">DEVELOP</div>
               <h3>Extend your local network</h3>
-              <p>
-                As requirements evolve, additional MV OFFICE services and relevant local
-                professional connections can be arranged according to your needs.
-              </p>
+              <p>Add services and local introductions as your needs grow.</p>
             </div>
           </div>
         </div>
@@ -427,9 +410,7 @@
             <div class="eyebrow">REQUEST INFORMATION</div>
             <h2 class="section-title">Establish your Madeira presence.<br />Build from there.</h2>
             <p class="section-lead">
-              Tell us what you are looking to establish in Madeira. We will explain the MV OFFICE
-              membership and, where appropriate, identify relevant local connections for the next
-              stage of your requirements.
+              Tell us what you need in Madeira and we will explain the membership.
             </p>
             <div class="hero-actions">
               <a class="btn gold" href="mailto:info@madeiravirtualoffice.com">Email MV OFFICE</a
@@ -464,11 +445,12 @@
           <div>Your Business. Our Address. Madeira.</div>
         </div>
         <div class="credits">
-          Hero photograph: Caniçal free trade area by Asurnipal,
-          <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener">CC BY-SA 4.0</a>,
-          cropped and resized. Photography on this version is provisional, for layout and visual
-          direction. Production imagery is to be replaced with commercially licensed photography,
-          with the licence records retained.
+          Photographs: Funchal by Bengt Nyman,
+          <a href="https://creativecommons.org/licenses/by/2.0/" rel="noopener">CC BY 2.0</a>;
+          Funchal cathedral and old town by Holger Uwe Schmitt,
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener">CC BY-SA 4.0</a>.
+          Both cropped and resized. Production imagery is to be replaced with commercially licensed
+          photography, with the licence records retained.
         </div>
       </div>
     </footer>
@@ -481,7 +463,7 @@
         "alternateName": "Madeira Virtual Office",
         "description": "A professional business address in Funchal, Madeira, with mail handling, scanning, coworking and practical local connections.",
         "url": "https://madeiravirtualoffice.com/",
-        "image": "https://madeiravirtualoffice.com/images/hero-canical.jpg",
+        "image": "https://madeiravirtualoffice.com/images/hero-funchal.webp",
         "email": "info@madeiravirtualoffice.com",
         "telephone": "+351291222710",
         "areaServed": "PT",
