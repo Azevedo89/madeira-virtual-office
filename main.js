@@ -1,3 +1,12 @@
+// Recarregar devolve sempre o topo: o browser restaura a posição anterior e o
+// pré-loader só liberta o scroll depois, deixando o visitante a meio da página.
+// Uma âncora escrita no link (#servicos) continua a valer na primeira visita.
+history.scrollRestoration = 'manual';
+const recarregou = performance.getEntriesByType('navigation')[0]?.type === 'reload';
+if (recarregou && location.hash) history.replaceState(null, '', location.pathname);
+const aoTopo = () => { if (!location.hash) scrollTo(0, 0); };
+aoTopo();
+
 // Preloader: barra determinada que só chega a 100% quando a página carrega,
 // com um mínimo visível para a animação não piscar em ligações rápidas.
 (() => {
@@ -17,7 +26,10 @@
     const p = Math.min(e * 100, ready ? 100 : 92);
     bar.style.width = p + '%';
     pct.textContent = Math.round(p) + '%';
-    if (ready && e >= 1) return document.body.classList.add('loaded');
+    if (ready && e >= 1) {
+      aoTopo(); // o scroll estava travado pelo pré-loader; só agora pega
+      return document.body.classList.add('loaded');
+    }
     requestAnimationFrame(tick);
   })();
 })();
@@ -45,7 +57,7 @@
       msg.textContent = 'Recebido. Respondemos no mesmo dia útil.';
       msg.className = 'form-msg ok';
     } catch {
-      msg.innerHTML = 'Não foi possível enviar. Escreva para <a href="mailto:info@madeiravirtualoffice.com">info@madeiravirtualoffice.com</a>.';
+      msg.innerHTML = 'Não foi possível enviar. Escreva para <a href="mailto:info@madeira-virtualoffice.com">info@madeira-virtualoffice.com</a>.';
       msg.className = 'form-msg err';
     } finally {
       btn.disabled = false;
@@ -57,7 +69,7 @@
 (() => {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const alvos = document.querySelectorAll(
-    '.section h2, .section .lead, .card, .gallery figure, .steps li, #faq details, .split > *, .form, .section .muted'
+    '.section h2, .section .lead, .card, .figs li, .gallery figure, .steps li, #faq details, .split > *, .form, .section .muted'
   );
   const io = new IntersectionObserver((entradas) => {
     for (const e of entradas) {
