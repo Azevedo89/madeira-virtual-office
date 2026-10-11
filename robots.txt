@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://madeira-virtualoffice.com/sitemap.xml
+Sitemap: https://madeiravirtualoffice.com/sitemap.xml
