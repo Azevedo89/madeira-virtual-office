@@ -51,25 +51,65 @@ export function initNav(doc) {
 }
 
 /**
- * Realça no menu a secção visível.
+ * Qual a secção activa, dadas as posições do topo de cada uma e a linha de
+ * leitura. Separada do DOM para poder ser testada com números.
+ * @param {{id: string, topo: number}[]} seccoes ordenadas por topo
+ * @param {number} linha
+ * @returns {string | null} null quando ainda se está acima da primeira
+ */
+export function seccaoActiva(seccoes, linha) {
+  let activa = null;
+  for (const s of seccoes) if (s.topo <= linha) activa = s.id;
+  return activa;
+}
+
+/**
+ * Realça no menu a secção em que o visitante está.
+ *
+ * Não usa IntersectionObserver: o link "Home" aponta para <main>, que contém
+ * todas as outras secções e está quase sempre a intersetar, pelo que roubava
+ * o realce permanentemente. A posição do scroll é inequívoca.
  * @param {Document} doc
  * @param {HTMLElement} menu
  */
 function realcarSeccaoVisivel(doc, menu) {
-  if (typeof IntersectionObserver === 'undefined') return;
-  const pares = [...menu.querySelectorAll('a[href^="#"]')]
-    .map((a) => /** @type {const} */ ([a, doc.querySelector(a.getAttribute('href') ?? '')]))
-    .filter(([, alvo]) => alvo !== null);
-  const io = new IntersectionObserver(
-    (entradas) => {
-      for (const e of entradas) {
-        if (!e.isIntersecting) continue;
-        for (const [a, alvo] of pares) a.classList.toggle('is-active', alvo === e.target);
-      }
-    },
-    { rootMargin: '-45% 0px -50% 0px' },
-  );
-  for (const [, alvo] of pares) if (alvo) io.observe(alvo);
+  const vista = doc.defaultView ?? window;
+  const ligacoes = [...menu.querySelectorAll('a[href^="#"]')]
+    .map((a) => ({ a, alvo: doc.querySelector(a.getAttribute('href') ?? '') }))
+    .filter((p) => p.alvo !== null);
+  const inicio = ligacoes.find((p) => p.alvo?.id === 'top');
+  const seccoes = ligacoes.filter((p) => p.alvo?.id !== 'top');
+  if (!seccoes.length) return;
+
+  const calcular = () => {
+    const barra = doc.getElementById('site-header');
+    const linha = vista.scrollY + (barra?.offsetHeight ?? 72) + 48;
+    const posicoes = seccoes.map((p) => ({
+      id: /** @type {Element} */ (p.alvo).id,
+      topo: /** @type {Element} */ (p.alvo).getBoundingClientRect().top + vista.scrollY,
+    }));
+
+    let id = seccaoActiva(posicoes, linha);
+    // chegado ao fim, a última secção manda, mesmo que não cruze a linha
+    const fundo = vista.scrollY + vista.innerHeight >= doc.documentElement.scrollHeight - 4;
+    if (fundo) id = posicoes[posicoes.length - 1]?.id ?? id;
+
+    const activa = id ? seccoes.find((p) => p.alvo?.id === id) : inicio;
+    for (const p of ligacoes) p.a.classList.toggle('is-active', p === activa);
+  };
+
+  let agendado = false;
+  const aoScroll = () => {
+    if (agendado) return;
+    agendado = true;
+    vista.requestAnimationFrame(() => {
+      agendado = false;
+      calcular();
+    });
+  };
+  vista.addEventListener('scroll', aoScroll, { passive: true });
+  vista.addEventListener('resize', aoScroll);
+  calcular();
 }
 
 // Sob o Vitest o módulo é importado só para testar as funções; arrancar aqui
@@ -135,9 +175,11 @@ export function initReveal(doc) {
       '.section-title',
       '.section-lead',
       '.micro',
+      '.hero-points li',
       '.feature',
       '.price-card',
       '.network-card',
+      '.carousel-ui',
       '.network-note',
       '.editorial-grid > *',
       '.step',
@@ -166,9 +208,76 @@ export function initReveal(doc) {
   }
 }
 
+/**
+ * Liga os botões e os pontos de um carrossel. O arrastar já funciona sem JS,
+ * por scroll-snap; isto é só o extra, e só aparece quando há mais do que um
+ * ecrã de conteúdo para percorrer.
+ * @param {Document} doc
+ */
+export function initCarousels(doc) {
+  for (const caixa of doc.querySelectorAll('[data-carousel]')) {
+    const via = /** @type {HTMLElement | null} */ (caixa.querySelector('.carousel-track'));
+    const anterior = /** @type {HTMLButtonElement | null} */ (
+      caixa.querySelector('[data-carousel-prev]')
+    );
+    const seguinte = /** @type {HTMLButtonElement | null} */ (
+      caixa.querySelector('[data-carousel-next]')
+    );
+    const pontos = caixa.querySelector('[data-carousel-dots]');
+    if (!via) continue;
+
+    const itens = /** @type {HTMLElement[]} */ ([...via.children]);
+    const transborda = () => via.scrollWidth - via.clientWidth > 4;
+
+    /** @param {number} i */
+    const irPara = (i) => {
+      const alvo = itens[Math.max(0, Math.min(i, itens.length - 1))];
+      if (alvo) via.scrollTo({ left: alvo.offsetLeft - via.offsetLeft });
+    };
+    const atual = () => {
+      let melhor = 0;
+      let menor = Infinity;
+      itens.forEach((el, i) => {
+        const d = Math.abs(el.offsetLeft - via.offsetLeft - via.scrollLeft);
+        if (d < menor) {
+          menor = d;
+          melhor = i;
+        }
+      });
+      return melhor;
+    };
+
+    if (pontos && !pontos.childElementCount) {
+      itens.forEach((_, i) => {
+        const b = doc.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', `Go to item ${i + 1}`);
+        b.addEventListener('click', () => irPara(i));
+        pontos.append(b);
+      });
+    }
+    anterior?.addEventListener('click', () => irPara(atual() - 1));
+    seguinte?.addEventListener('click', () => irPara(atual() + 1));
+
+    const sincronizar = () => {
+      caixa.classList.toggle('is-ativo', transborda());
+      const i = atual();
+      if (anterior) anterior.disabled = via.scrollLeft <= 2;
+      if (seguinte) seguinte.disabled = via.scrollLeft + via.clientWidth >= via.scrollWidth - 2;
+      pontos
+        ?.querySelectorAll('button')
+        .forEach((b, j) => b.setAttribute('aria-current', String(j === i)));
+    };
+    via.addEventListener('scroll', sincronizar, { passive: true });
+    doc.defaultView?.addEventListener('resize', sincronizar);
+    sincronizar();
+  }
+}
+
 if (!import.meta.env?.VITEST) {
   initScrollTop();
   initNav(document);
   initPreloader(document);
   initReveal(document);
+  initCarousels(document);
 }
