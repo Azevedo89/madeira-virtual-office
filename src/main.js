@@ -51,25 +51,65 @@ export function initNav(doc) {
 }
 
 /**
- * Realça no menu a secção visível.
+ * Qual a secção activa, dadas as posições do topo de cada uma e a linha de
+ * leitura. Separada do DOM para poder ser testada com números.
+ * @param {{id: string, topo: number}[]} seccoes ordenadas por topo
+ * @param {number} linha
+ * @returns {string | null} null quando ainda se está acima da primeira
+ */
+export function seccaoActiva(seccoes, linha) {
+  let activa = null;
+  for (const s of seccoes) if (s.topo <= linha) activa = s.id;
+  return activa;
+}
+
+/**
+ * Realça no menu a secção em que o visitante está.
+ *
+ * Não usa IntersectionObserver: o link "Home" aponta para <main>, que contém
+ * todas as outras secções e está quase sempre a intersetar, pelo que roubava
+ * o realce permanentemente. A posição do scroll é inequívoca.
  * @param {Document} doc
  * @param {HTMLElement} menu
  */
 function realcarSeccaoVisivel(doc, menu) {
-  if (typeof IntersectionObserver === 'undefined') return;
-  const pares = [...menu.querySelectorAll('a[href^="#"]')]
-    .map((a) => /** @type {const} */ ([a, doc.querySelector(a.getAttribute('href') ?? '')]))
-    .filter(([, alvo]) => alvo !== null);
-  const io = new IntersectionObserver(
-    (entradas) => {
-      for (const e of entradas) {
-        if (!e.isIntersecting) continue;
-        for (const [a, alvo] of pares) a.classList.toggle('is-active', alvo === e.target);
-      }
-    },
-    { rootMargin: '-45% 0px -50% 0px' },
-  );
-  for (const [, alvo] of pares) if (alvo) io.observe(alvo);
+  const vista = doc.defaultView ?? window;
+  const ligacoes = [...menu.querySelectorAll('a[href^="#"]')]
+    .map((a) => ({ a, alvo: doc.querySelector(a.getAttribute('href') ?? '') }))
+    .filter((p) => p.alvo !== null);
+  const inicio = ligacoes.find((p) => p.alvo?.id === 'top');
+  const seccoes = ligacoes.filter((p) => p.alvo?.id !== 'top');
+  if (!seccoes.length) return;
+
+  const calcular = () => {
+    const barra = doc.getElementById('site-header');
+    const linha = vista.scrollY + (barra?.offsetHeight ?? 72) + 48;
+    const posicoes = seccoes.map((p) => ({
+      id: /** @type {Element} */ (p.alvo).id,
+      topo: /** @type {Element} */ (p.alvo).getBoundingClientRect().top + vista.scrollY,
+    }));
+
+    let id = seccaoActiva(posicoes, linha);
+    // chegado ao fim, a última secção manda, mesmo que não cruze a linha
+    const fundo = vista.scrollY + vista.innerHeight >= doc.documentElement.scrollHeight - 4;
+    if (fundo) id = posicoes[posicoes.length - 1]?.id ?? id;
+
+    const activa = id ? seccoes.find((p) => p.alvo?.id === id) : inicio;
+    for (const p of ligacoes) p.a.classList.toggle('is-active', p === activa);
+  };
+
+  let agendado = false;
+  const aoScroll = () => {
+    if (agendado) return;
+    agendado = true;
+    vista.requestAnimationFrame(() => {
+      agendado = false;
+      calcular();
+    });
+  };
+  vista.addEventListener('scroll', aoScroll, { passive: true });
+  vista.addEventListener('resize', aoScroll);
+  calcular();
 }
 
 // Sob o Vitest o módulo é importado só para testar as funções; arrancar aqui
