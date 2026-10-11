@@ -200,3 +200,54 @@ footer{background:#021225;color:#8ea0b0;padding:28px 0;font-size:11px}
 .contact-box .label + .label{margin-top:24px}
 
 
+
+/* ── Pré-loader ──────────────────────────────────────────────────────────
+   Dois painéis navy que se abrem, com o wordmark e uma barra de progresso.
+   Não trava o scroll do body de propósito: se o JS falhar, o site ficaria
+   preso. A sobreposição é fixa e tapa tudo, e a animação de salvaguarda
+   abaixo retira-a mesmo que nenhum JS chegue a correr. */
+#preloader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden;
+  animation:pl-salvaguarda 0s linear 9s forwards}
+@keyframes pl-salvaguarda{to{visibility:hidden;pointer-events:none}}
+.pl-pane{position:absolute;left:0;width:100%;height:50%;
+  background:linear-gradient(160deg,#04162b,#071f3b 60%,#04162b);
+  /* o degradê é dimensionado ao ecrã inteiro e ancorado em cada metade,
+     senão recomeça a meio e deixa uma costura visível entre os painéis */
+  background-size:100vw 100vh;
+  transition:transform .75s cubic-bezier(.76,0,.24,1)}
+.pl-pane-top{top:0;background-position:top center}
+.pl-pane-bottom{bottom:0;background-position:bottom center}
+.pl-content{position:relative;display:grid;justify-items:center;gap:22px;padding:0 24px;
+  transition:opacity .35s ease,transform .45s ease}
+.pl-logo{position:relative;width:min(300px,62vw);aspect-ratio:2309/395}
+.pl-logo img{width:100%;display:block}
+/* brilho dourado a atravessar o wordmark, recortado pela sua própria forma */
+.pl-shine{position:absolute;inset:0;pointer-events:none;
+  -webkit-mask:url("/images/mv-office-wordmark.svg") center/contain no-repeat;
+  mask:url("/images/mv-office-wordmark.svg") center/contain no-repeat;
+  background:linear-gradient(105deg,rgba(216,182,99,0) 40%,var(--gold2) 50%,rgba(216,182,99,0) 60%);
+  background-size:300% 100%;background-repeat:no-repeat;
+  animation:pl-brilho 2.4s cubic-bezier(.45,0,.35,1) infinite}
+@keyframes pl-brilho{0%{background-position:190% 0}60%,100%{background-position:-90% 0}}
+.pl-bar{width:min(220px,52vw);height:2px;background:rgba(255,255,255,.14);border-radius:2px;overflow:hidden}
+.pl-bar span{display:block;height:100%;width:0;border-radius:2px;background:var(--gold2)}
+.pl-pct{margin:0;font-size:11px;letter-spacing:.3em;font-weight:800;
+  color:var(--gold2);font-variant-numeric:tabular-nums}
+
+#preloader.is-done{visibility:hidden;transition:visibility 0s .75s}
+#preloader.is-done .pl-pane-top{transform:translateY(-100%)}
+#preloader.is-done .pl-pane-bottom{transform:translateY(100%)}
+#preloader.is-done .pl-content{opacity:0;transform:translateY(-10px);transition-duration:.25s}
+
+/* ── Revelação ao scroll ─────────────────────────────────────────────────
+   A classe .reveal é posta pelo JS, nunca no HTML: sem JS, nada fica
+   escondido. */
+.reveal{opacity:0;transform:translateY(22px);
+  transition:opacity .6s cubic-bezier(.22,.61,.36,1),transform .6s cubic-bezier(.22,.61,.36,1)}
+.reveal.is-in{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  .pl-shine{animation:none;background:none}
+  .pl-pane,.pl-content{transition-duration:.15s}
+  .reveal,.reveal.is-in{opacity:1;transform:none;transition:none}
+}
