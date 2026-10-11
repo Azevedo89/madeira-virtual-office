@@ -41,6 +41,7 @@
     </div>
     <a class="skip" href="#top">Skip to content</a>
     <header class="site-header" id="site-header">
+      <span class="read-bar" id="read-bar" aria-hidden="true"></span>
       <a class="brand" href="#top" aria-label="MV OFFICE — home">
         <img
           class="brand__mark"
@@ -69,7 +70,11 @@
     </header>
     <main id="top">
       <section class="hero">
-        <div class="hero-image"></div>
+        <div class="hero-image">
+          <a class="hero-cue" href="#service" aria-label="Scroll to the service">
+            <span></span>
+          </a>
+        </div>
         <div class="wrap hero-copy">
           <div class="hero-grid">
             <div>
@@ -219,7 +224,9 @@
             <aside class="price-card">
               <div class="eyebrow">ONE MEMBERSHIP</div>
               <h3>A Madeira business presence that is easy to understand.</h3>
-              <div class="price">€300 <small>+ IVA / year</small></div>
+              <div class="price">
+                <span data-contar="300">€300</span> <small>+ IVA / year</small>
+              </div>
               <div class="price-note">
                 Paid annually in advance.<br /><strong>Equivalent to €25 + IVA per month.</strong>
               </div>
@@ -437,7 +444,8 @@
               </div>
               <label>
                 What do you need?
-                <select name="interest">
+                <select name="interest" required>
+                  <option value="">Please choose…</option>
                   <option>The MV OFFICE membership</option>
                   <option>Membership and registered office use</option>
                   <option>Membership and additional services</option>
@@ -452,8 +460,7 @@
               </p>
             </form>
             <div class="hero-actions">
-              <a class="btn light" href="mailto:info@madeiravirtualoffice.com">Email instead</a
-              ><a class="btn light" href="https://wa.me/351969741026">WhatsApp</a>
+              <a class="btn light" href="https://wa.me/351969741026">WhatsApp instead</a>
             </div>
           </div>
           <div class="contact-box">
