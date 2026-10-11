@@ -1,39 +1,85 @@
-# Madeira Virtual Office
+# MV OFFICE — Madeira Virtual Office
 
-Site estático (HTML/CSS/JS, sem build). Serviços: Business Address, Mail Handling,
-Mail Scanning e Business Support no Funchal, Madeira.
+Site do MV OFFICE: endereço comercial no Funchal, com receção e digitalização
+de correio, coworking e ligações locais.
 
-## Correr localmente
+Segue a direção **V15 final** entregue pelo designer
+(`MV_OFFICE_FINAL_WEB_DESIGNER_PRESENTATION`). A sequência das secções, o
+preço e a identidade vêm de lá.
+
+## Arrancar
 
 ```
-python3 -m http.server 8000
+pnpm install
+pnpm dev
 ```
 
-Depois abrir http://localhost:8000
+Abre em http://localhost:5173
 
-## Ficheiros
+| Comando             | O quê                                               |
+| ------------------- | --------------------------------------------------- |
+| `pnpm dev`          | servidor de desenvolvimento, com recarga automática |
+| `pnpm build`        | gera `dist/`                                        |
+| `pnpm preview`      | serve o `dist/` como vai para produção              |
+| `pnpm lint`         | ESLint                                              |
+| `pnpm typecheck`    | TypeScript em modo `checkJs`, sobre o JS            |
+| `pnpm test`         | Vitest                                              |
+| `pnpm format`       | Prettier, a escrever                                |
+| `pnpm format:check` | Prettier, só a verificar                            |
 
-| Ficheiro | O quê |
-|---|---|
-| `index.html` | página única |
-| `styles.css` | estilos (azul/branco + dourado do logótipo) |
-| `main.js` | pré-loader e envio do formulário |
-| `images/` | logótipo e fotografias |
+## Quality gates
 
-## Formulário
+Todos correm em cada PR e têm de estar verdes para fazer merge:
 
-Usa [FormSubmit.co](https://formsubmit.co) — sem back-end e sem base de dados.
-O `action` do form em `index.html` aponta para o email de destino; o **primeiro
-envio gera um email de ativação** que tem de ser confirmado uma vez.
+| Verificação                  | O que apanha                                              |
+| ---------------------------- | --------------------------------------------------------- |
+| `lint`                       | erros e maus hábitos no JS                                |
+| `typecheck`                  | erros de tipo, sem converter o projeto para TypeScript    |
+| `test`                       | estrutura do HTML, acessibilidade, contraste e o menu     |
+| `format:check`               | formatação fora do padrão                                 |
+| `secret-scan`                | segredos no código e no histórico (gitleaks)              |
+| `lighthouse (a11y/seo/perf)` | acessibilidade 100, SEO e boas práticas 95, desempenho 85 |
+| `conventional-commit`        | título do PR no formato `tipo: descrição`                 |
+
+Os testes não são de fachada: o `tests/contrast.test.js` calcula os rácios
+WCAG a partir dos próprios tokens do CSS. A paleta original do designer
+reprovava — o dourado `#b9903d` dá 2,95:1 sobre branco, quando a norma exige
+4,5:1 — e existe agora um `--gold-text` para texto sobre fundo claro.
+
+## Estrutura
+
+| Caminho          | O quê                                        |
+| ---------------- | -------------------------------------------- |
+| `index.html`     | a página                                     |
+| `src/styles.css` | estilos (navy `#071F3B`, dourado `#D8B663`)  |
+| `src/main.js`    | barra flutuante e topo ao recarregar         |
+| `public/`        | servido tal e qual: imagens, robots, sitemap |
+| `brand/`         | masters vetoriais do logótipo                |
+| `tests/`         | Vitest                                       |
+
+## Deploy
+
+Vercel, a partir do GitHub. `vercel.json` fixa o build (`pnpm build` para
+`dist/`), os cabeçalhos de segurança e a cache. Cada PR gera um preview.
+
+- `main` → produção
+- `dev` e branches de feature → preview
+
+## Contactos publicados
+
+Morada, telefone, WhatsApp e email estão no fim do `index.html` e repetidos
+no JSON-LD. Mudar num sítio obriga a mudar no outro.
 
 ## Por fazer
 
-- [ ] Comprar domínio e apontar para o alojamento
-- [ ] Trocar `info@madeiravirtualoffice.com` pelo email definitivo
-- [ ] Definir modelo de pagamento
-- [ ] Morada real na secção "O local"
+- [x] Domínio: madeiravirtualoffice.com (sem hífen)
+- [ ] Apontar DNS para a Vercel
+- [ ] Confirmar que a caixa info@madeiravirtualoffice.com recebe
+- [ ] Substituir a fotografia provisória por fotografia licenciada
 
-## Créditos das fotografias
+## Fotografias
 
-Wikimedia Commons: Diego Delso, Virgílio Gomes, Holger Uwe Schmitt, Dietmar Rabich (CC BY-SA 4.0);
-Michael Gaylard (CC BY 2.0). A atribuição no rodapé é obrigatória pelas licenças.
+**Provisórias.** O hero é do Caniçal, de Asurnipal, CC BY-SA 4.0, cortado e
+redimensionado — a atribuição no rodapé é obrigatória pela licença. A
+`madeira-flower.jpg` veio da entrega do designer **sem indicação de autor nem
+de licença**, e tem de ser substituída ou licenciada antes de ir para o ar.
