@@ -1,0 +1,5 @@
+# O esbuild (via Vite) precisa do script de instalação para o binário da
+# plataforma. Em pnpm 12 a definição é um mapa e chama-se allowBuilds; sem
+# ela, `pnpm install --frozen-lockfile` falha com ERR_PNPM_IGNORED_BUILDS.
+allowBuilds:
+  esbuild: true
