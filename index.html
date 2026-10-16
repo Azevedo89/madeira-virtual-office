@@ -41,6 +41,7 @@
     </div>
     <a class="skip" href="#top">Skip to content</a>
     <header class="site-header" id="site-header">
+      <span class="read-bar" id="read-bar" aria-hidden="true"></span>
       <a class="brand" href="#top" aria-label="MV OFFICE — home">
         <img
           class="brand__mark"
@@ -69,7 +70,11 @@
     </header>
     <main id="top">
       <section class="hero">
-        <div class="hero-image"></div>
+        <div class="hero-image">
+          <a class="hero-cue" href="#service" aria-label="Scroll to the service">
+            <span></span>
+          </a>
+        </div>
         <div class="wrap hero-copy">
           <div class="hero-grid">
             <div>
@@ -219,7 +224,9 @@
             <aside class="price-card">
               <div class="eyebrow">ONE MEMBERSHIP</div>
               <h3>A Madeira business presence that is easy to understand.</h3>
-              <div class="price">€300 <small>+ IVA / year</small></div>
+              <div class="price">
+                <span data-contar="300">€300</span> <small>+ IVA / year</small>
+              </div>
               <div class="price-note">
                 Paid annually in advance.<br /><strong>Equivalent to €25 + IVA per month.</strong>
               </div>
@@ -412,9 +419,48 @@
             <p class="section-lead">
               Tell us what you need in Madeira and we will explain the membership.
             </p>
+            <form
+              class="form"
+              id="contact-form"
+              method="post"
+              action="https://formsubmit.co/ajax/info@madeiravirtualoffice.com"
+            >
+              <input type="hidden" name="_subject" value="New enquiry — MV OFFICE" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input
+                type="text"
+                name="_honey"
+                style="display: none"
+                tabindex="-1"
+                autocomplete="off"
+                aria-hidden="true"
+              />
+              <div class="form-row">
+                <label>Name <input name="name" autocomplete="name" required /></label>
+                <label
+                  >Email <input type="email" name="email" autocomplete="email" required
+                /></label>
+              </div>
+              <label>
+                What do you need?
+                <select name="interest" required>
+                  <option value="">Please choose…</option>
+                  <option>The MV OFFICE membership</option>
+                  <option>Membership and registered office use</option>
+                  <option>Membership and additional services</option>
+                  <option>Not sure yet</option>
+                </select>
+              </label>
+              <label>Message <textarea name="message" rows="4" required></textarea></label>
+              <button class="btn gold" type="submit">Send enquiry</button>
+              <p class="form-msg" role="status"></p>
+              <p class="form-note">
+                We use what you send here only to answer you. Nothing else, no mailing list.
+              </p>
+            </form>
             <div class="hero-actions">
-              <a class="btn gold" href="mailto:info@madeiravirtualoffice.com">Email MV OFFICE</a
-              ><a class="btn light" href="https://wa.me/351969741026">WhatsApp</a>
+              <a class="btn light" href="https://wa.me/351969741026">WhatsApp instead</a>
             </div>
           </div>
           <div class="contact-box">
@@ -449,8 +495,7 @@
           <a href="https://creativecommons.org/licenses/by/2.0/" rel="noopener">CC BY 2.0</a>;
           Funchal cathedral and old town by Holger Uwe Schmitt,
           <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener">CC BY-SA 4.0</a>.
-          Both cropped and resized. Production imagery is to be replaced with commercially licensed
-          photography, with the licence records retained.
+          Both cropped and resized.
         </div>
       </div>
     </footer>
@@ -483,6 +528,78 @@
           "description": "Annual membership, paid annually in advance. Price excludes IVA.",
           "eligibleDuration": { "@type": "QuantitativeValue", "value": 1, "unitCode": "ANN" }
         }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is this a real physical address?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. MV OFFICE operates from a physical business location in Funchal. It is not a PO Box."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use it as my registered office?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Registered-office use is available where permitted and subject to the applicable requirements. We confirm the relevant requirements for your situation before activation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens when my mail arrives?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Mail is checked daily. You are notified when correspondence arrives and important documents can be scanned securely and sent by email."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is forwarding included?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Physical forwarding is an additional service, so you only pay for it when you need it."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What does the €300 annual membership include?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The core membership includes the professional address, mail handling and notifications, scanning, one coworking day per month with printer/scanner access, basic support and appropriate local introductions."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to live in Madeira?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The service is designed to support businesses and professionals who need a local Madeira presence, including international clients."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can MV OFFICE provide an accountant or lawyer?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "MV OFFICE does not replace specialist professional advisers. Where appropriate, we can help introduce you to independent local professionals who may be relevant to your requirements."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I request other services?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Additional MV OFFICE services can be arranged separately. The current Services & Price Guide sets out the available options and applicable charges."
+            }
+          }
+        ]
       }
     </script>
   </body>

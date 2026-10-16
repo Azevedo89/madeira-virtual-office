@@ -74,18 +74,30 @@ no JSON-LD. Mudar num sítio obriga a mudar no outro.
 
 - [x] Domínio: madeiravirtualoffice.com (sem hífen)
 - [ ] Apontar DNS para a Vercel
-- [ ] Confirmar que a caixa info@madeiravirtualoffice.com recebe
+- [ ] **Confirmar que a caixa info@madeiravirtualoffice.com recebe** — o formulário
+      usa FormSubmit e o primeiro envio gera um email de ativação que tem de ser
+      confirmado uma vez. Até lá o formulário não entrega nada.
+- [ ] Ligar o Vercel Analytics no painel do projeto
+- [ ] Identificação legal: denominação social, NIPC, política de privacidade e
+      Livro de Reclamações eletrónico
 - [ ] Substituir a fotografia provisória por fotografia licenciada
 
 ## Fotografias
 
-**Provisórias, mas todas com licença e autor conhecidos.**
+| Ficheiro             | Onde                    | Autor              | Licença      |
+| -------------------- | ----------------------- | ------------------ | ------------ |
+| `hero-funchal.webp`  | hero                    | Bengt Nyman        | CC BY 2.0    |
+| `funchal-baixa.webp` | secção Madeira          | Holger Uwe Schmitt | CC BY-SA 4.0 |
+| `og.jpg`             | pré-visualização social | Bengt Nyman        | CC BY 2.0    |
 
-| Ficheiro                      | Autor              | Licença      |
-| ----------------------------- | ------------------ | ------------ |
-| `hero-funchal.webp`, `og.jpg` | Bengt Nyman        | CC BY 2.0    |
-| `funchal-baixa.webp`          | Holger Uwe Schmitt | CC BY-SA 4.0 |
+### O hero que queremos mesmo
 
-Ambas cortadas e redimensionadas. A atribuição no rodapé é obrigatória pelas
-licenças. A `madeira-flower.jpg`, que vinha da entrega do designer sem autor
-nem licença, foi removida.
+A fotografia escolhida é a da baía ao anoitecer, do próprio (confirmado a
+2026-10-16, sem necessidade de atribuição). **Está em espera por resolução**:
+o ficheiro entregue, `mvo.jpeg`, tem 480×269, e num hero a toda a largura isso
+é uma ampliação de três vezes que se vê à distância.
+
+Procurei alternativas ao anoitecer em alta resolução no Wikimedia Commons —
+não existe nenhuma com licença livre. Assim que houver o original da câmara,
+trocar `hero-funchal.webp` e também o `og.jpg`, que precisa de 1200px de
+largura para as pré-visualizações sociais.

@@ -1,3 +1,6 @@
+// Vercel Analytics: sem cookies e sem dados pessoais.
+import { inject } from '@vercel/analytics';
+
 /**
  * Devolve o topo ao recarregar, em vez de repor a posição anterior.
  * Uma âncora escrita no link (#faq) continua a valer na primeira visita.
@@ -185,6 +188,7 @@ export function initReveal(doc) {
       '.step',
       '.faq-list details',
       '.contact-box',
+      '.form',
       '.hero-actions',
     ].join(','),
   );
@@ -274,10 +278,135 @@ export function initCarousels(doc) {
   }
 }
 
+/**
+ * Envio do formulário sem back-end, via FormSubmit. O envio é assíncrono para
+ * o visitante não sair da página; se falhar, mostra o email para ele não
+ * ficar sem caminho.
+ * @param {Document} doc
+ */
+export function initForm(doc) {
+  const form = /** @type {HTMLFormElement | null} */ (doc.getElementById('contact-form'));
+  if (!form) return;
+  const aviso = form.querySelector('.form-msg');
+  const botao = /** @type {HTMLButtonElement | null} */ (form.querySelector('button'));
+
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    if (botao) botao.disabled = true;
+    if (aviso) {
+      aviso.textContent = 'Sending…';
+      aviso.className = 'form-msg';
+    }
+    try {
+      const r = await fetch(form.action, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(form),
+      });
+      if (!r.ok) throw new Error(String(r.status));
+      form.reset();
+      if (aviso) {
+        aviso.textContent = 'Thank you. We will reply within one working day.';
+        aviso.className = 'form-msg is-ok';
+      }
+    } catch {
+      if (aviso) {
+        aviso.innerHTML =
+          'Could not send. Please write to ' +
+          '<a href="mailto:info@madeiravirtualoffice.com">info@madeiravirtualoffice.com</a>.';
+        aviso.className = 'form-msg is-err';
+      }
+    } finally {
+      if (botao) botao.disabled = false;
+    }
+  });
+}
+
+/**
+ * Barra de progresso de leitura na barra flutuante.
+ * @param {Document} doc
+ */
+export function initProgresso(doc) {
+  const barra = doc.getElementById('read-bar');
+  if (!barra) return;
+  const vista = doc.defaultView ?? window;
+  let agendado = false;
+  const pintar = () => {
+    agendado = false;
+    const total = doc.documentElement.scrollHeight - vista.innerHeight;
+    const p = total > 0 ? Math.min(1, Math.max(0, vista.scrollY / total)) : 0;
+    barra.style.width = `${(p * 100).toFixed(1)}%`;
+  };
+  const aoScroll = () => {
+    if (agendado) return;
+    agendado = true;
+    vista.requestAnimationFrame(pintar);
+  };
+  vista.addEventListener('scroll', aoScroll, { passive: true });
+  vista.addEventListener('resize', aoScroll);
+  pintar();
+}
+
+/**
+ * Passo de uma contagem com travagem no fim.
+ * Separado para ser testável sem relógio nem DOM.
+ * @param {number} fracao 0 a 1
+ * @param {number} fim
+ * @returns {number}
+ */
+export function valorContado(fracao, fim) {
+  const f = Math.min(1, Math.max(0, fracao));
+  return Math.round(fim * (1 - Math.pow(1 - f, 3)));
+}
+
+/**
+ * Faz o preço contar até ao valor quando entra no ecrã. Uma vez só.
+ * @param {Document} doc
+ */
+export function initContagem(doc) {
+  const vista = doc.defaultView ?? window;
+  const alvos = doc.querySelectorAll('[data-contar]');
+  if (!alvos.length) return;
+  if (
+    typeof IntersectionObserver === 'undefined' ||
+    vista.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  ) {
+    return; // fica o valor que já está escrito no HTML
+  }
+
+  const io = new IntersectionObserver(
+    (entradas) => {
+      for (const e of entradas) {
+        if (!e.isIntersecting) continue;
+        io.unobserve(e.target);
+        const el = /** @type {HTMLElement} */ (e.target);
+        const fim = Number(el.dataset.contar);
+        const texto = el.textContent ?? '';
+        const prefixo = texto.replace(/[\d\s].*$/, '');
+        const t0 = performance.now();
+        const passo = () => {
+          const f = (performance.now() - t0) / 900;
+          el.textContent = prefixo + valorContado(f, fim);
+          if (f < 1) vista.requestAnimationFrame(passo);
+        };
+        passo();
+      }
+    },
+    { threshold: 0.6 },
+  );
+  for (const el of alvos) io.observe(el);
+}
+
 if (!import.meta.env?.VITEST) {
   initScrollTop();
   initNav(document);
   initPreloader(document);
   initReveal(document);
   initCarousels(document);
+  initForm(document);
+  initProgresso(document);
+  initContagem(document);
+  // o script do analytics só existe quando servido pela Vercel; em local dava
+  // 404 e um erro de consola que o Lighthouse penaliza
+  if (!['localhost', '127.0.0.1', ''].includes(location.hostname)) inject();
 }
