@@ -84,17 +84,20 @@ no JSON-LD. Mudar num sítio obriga a mudar no outro.
 
 ## Fotografias
 
-| Ficheiro             | Onde                              | Autor              | Licença           |
-| -------------------- | --------------------------------- | ------------------ | ----------------- |
-| `hero-funchal.webp`  | hero                              | **por confirmar**  | **por confirmar** |
-| `funchal-baixa.webp` | secção Madeira                    | Holger Uwe Schmitt | CC BY-SA 4.0      |
-| `og.jpg`             | pré-visualização em redes sociais | Bengt Nyman        | CC BY 2.0         |
+| Ficheiro             | Onde                    | Autor              | Licença      |
+| -------------------- | ----------------------- | ------------------ | ------------ |
+| `hero-funchal.webp`  | hero                    | Bengt Nyman        | CC BY 2.0    |
+| `funchal-baixa.webp` | secção Madeira          | Holger Uwe Schmitt | CC BY-SA 4.0 |
+| `og.jpg`             | pré-visualização social | Bengt Nyman        | CC BY 2.0    |
 
-O hero veio de `mvo.jpeg`, entregue pelo cliente. **Faltam duas coisas antes
-de ir a produção:** o ficheiro original em alta resolução (o entregue tem
-480×269, que num hero é uma ampliação de três vezes) e a confirmação de autor
-e licença. Sem isso repete-se o problema da `madeira-flower.jpg`.
+### O hero que queremos mesmo
 
-O `og.jpg` continua a ser a vista diurna do Bengt Nyman por ser a única em
-resolução suficiente para pré-visualizações sociais, que pedem 1200px de
-largura. Troca-se pela do hero assim que houver o original.
+A fotografia escolhida é a da baía ao anoitecer, do próprio (confirmado a
+2026-10-16, sem necessidade de atribuição). **Está em espera por resolução**:
+o ficheiro entregue, `mvo.jpeg`, tem 480×269, e num hero a toda a largura isso
+é uma ampliação de três vezes que se vê à distância.
+
+Procurei alternativas ao anoitecer em alta resolução no Wikimedia Commons —
+não existe nenhuma com licença livre. Assim que houver o original da câmara,
+trocar `hero-funchal.webp` e também o `og.jpg`, que precisa de 1200px de
+largura para as pré-visualizações sociais.
