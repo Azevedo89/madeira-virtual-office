@@ -84,13 +84,17 @@ no JSON-LD. Mudar num sítio obriga a mudar no outro.
 
 ## Fotografias
 
-**Provisórias, mas todas com licença e autor conhecidos.**
+| Ficheiro             | Onde                              | Autor              | Licença           |
+| -------------------- | --------------------------------- | ------------------ | ----------------- |
+| `hero-funchal.webp`  | hero                              | **por confirmar**  | **por confirmar** |
+| `funchal-baixa.webp` | secção Madeira                    | Holger Uwe Schmitt | CC BY-SA 4.0      |
+| `og.jpg`             | pré-visualização em redes sociais | Bengt Nyman        | CC BY 2.0         |
 
-| Ficheiro                      | Autor              | Licença      |
-| ----------------------------- | ------------------ | ------------ |
-| `hero-funchal.webp`, `og.jpg` | Bengt Nyman        | CC BY 2.0    |
-| `funchal-baixa.webp`          | Holger Uwe Schmitt | CC BY-SA 4.0 |
+O hero veio de `mvo.jpeg`, entregue pelo cliente. **Faltam duas coisas antes
+de ir a produção:** o ficheiro original em alta resolução (o entregue tem
+480×269, que num hero é uma ampliação de três vezes) e a confirmação de autor
+e licença. Sem isso repete-se o problema da `madeira-flower.jpg`.
 
-Ambas cortadas e redimensionadas. A atribuição no rodapé é obrigatória pelas
-licenças. A `madeira-flower.jpg`, que vinha da entrega do designer sem autor
-nem licença, foi removida.
+O `og.jpg` continua a ser a vista diurna do Bengt Nyman por ser a única em
+resolução suficiente para pré-visualizações sociais, que pedem 1200px de
+largura. Troca-se pela do hero assim que houver o original.
