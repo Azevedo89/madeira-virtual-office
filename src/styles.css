@@ -70,9 +70,9 @@ a{color:inherit;text-decoration:none}
 
 }
 .hero{background:var(--navy);color:#fff}
-.hero-image{height:clamp(440px,54vw,720px);position:relative;background-image:linear-gradient(90deg,rgba(4,22,43,.08),rgba(4,22,43,.02)),url("/images/hero-canical.jpg");background-size:cover;background-position:center}
+.hero-image{height:clamp(440px,54vw,720px);position:relative;background-image:linear-gradient(90deg,rgba(4,22,43,.08),rgba(4,22,43,.02)),url("/images/hero-funchal.webp");background-size:cover;background-position:center}
 .hero-image:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,22,43,.68) 0%,rgba(4,22,43,.30) 16%,rgba(4,22,43,0) 42%,rgba(4,22,43,.42) 100%)}
-.hero-image-label{position:absolute;z-index:2;right:5%;bottom:28px;background:rgba(4,22,43,.88);padding:10px 14px;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+
 .hero-copy{padding:74px 0 78px}
 .hero-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:80px;align-items:end}
 .hero h1{font-size:clamp(52px,6vw,86px);line-height:.98;letter-spacing:-.055em;margin:13px 0 22px;max-width:880px}
@@ -200,3 +200,177 @@ footer{background:#021225;color:#8ea0b0;padding:28px 0;font-size:11px}
 .contact-box .label + .label{margin-top:24px}
 
 
+
+/* ── Pré-loader ──────────────────────────────────────────────────────────
+   Dois painéis navy que se abrem, com o wordmark e uma barra de progresso.
+   Não trava o scroll do body de propósito: se o JS falhar, o site ficaria
+   preso. A sobreposição é fixa e tapa tudo, e a animação de salvaguarda
+   abaixo retira-a mesmo que nenhum JS chegue a correr. */
+#preloader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden;
+  animation:pl-salvaguarda 0s linear 9s forwards}
+@keyframes pl-salvaguarda{to{visibility:hidden;pointer-events:none}}
+.pl-pane{position:absolute;left:0;width:100%;height:50%;
+  background:linear-gradient(160deg,#04162b,#071f3b 60%,#04162b);
+  /* o degradê é dimensionado ao ecrã inteiro e ancorado em cada metade,
+     senão recomeça a meio e deixa uma costura visível entre os painéis */
+  background-size:100vw 100vh;
+  transition:transform .75s cubic-bezier(.76,0,.24,1)}
+.pl-pane-top{top:0;background-position:top center}
+.pl-pane-bottom{bottom:0;background-position:bottom center}
+.pl-content{position:relative;display:grid;justify-items:center;gap:22px;padding:0 24px;
+  transition:opacity .35s ease,transform .45s ease}
+.pl-logo{position:relative;width:min(300px,62vw);aspect-ratio:2309/395}
+.pl-logo img{width:100%;display:block}
+/* brilho dourado a atravessar o wordmark, recortado pela sua própria forma */
+.pl-shine{position:absolute;inset:0;pointer-events:none;
+  -webkit-mask:url("/images/mv-office-wordmark.svg") center/contain no-repeat;
+  mask:url("/images/mv-office-wordmark.svg") center/contain no-repeat;
+  background:linear-gradient(105deg,rgba(216,182,99,0) 40%,var(--gold2) 50%,rgba(216,182,99,0) 60%);
+  background-size:300% 100%;background-repeat:no-repeat;
+  animation:pl-brilho 2.4s cubic-bezier(.45,0,.35,1) infinite}
+@keyframes pl-brilho{0%{background-position:190% 0}60%,100%{background-position:-90% 0}}
+.pl-bar{width:min(220px,52vw);height:2px;background:rgba(255,255,255,.14);border-radius:2px;overflow:hidden}
+.pl-bar span{display:block;height:100%;width:0;border-radius:2px;background:var(--gold2)}
+.pl-pct{margin:0;font-size:11px;letter-spacing:.3em;font-weight:800;
+  color:var(--gold2);font-variant-numeric:tabular-nums}
+
+#preloader.is-done{visibility:hidden;transition:visibility 0s .75s}
+#preloader.is-done .pl-pane-top{transform:translateY(-100%)}
+#preloader.is-done .pl-pane-bottom{transform:translateY(100%)}
+#preloader.is-done .pl-content{opacity:0;transform:translateY(-10px);transition-duration:.25s}
+
+/* ── Revelação ao scroll ─────────────────────────────────────────────────
+   A classe .reveal é posta pelo JS, nunca no HTML: sem JS, nada fica
+   escondido. */
+.reveal{opacity:0;transform:translateY(22px);
+  transition:opacity .6s cubic-bezier(.22,.61,.36,1),transform .6s cubic-bezier(.22,.61,.36,1)}
+.reveal.is-in{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  .pl-shine{animation:none;background:none}
+  .pl-pane,.pl-content{transition-duration:.15s}
+  .reveal,.reveal.is-in{opacity:1;transform:none;transition:none}
+}
+
+/* ── Carrossel ───────────────────────────────────────────────────────────
+   Scroll-snap nativo: arrasta-se com o dedo sem JS nenhum. Os botões e os
+   pontos são um extra, e o JS só os liga se existirem. */
+.carousel{position:relative;margin-top:42px}
+.carousel-track{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(260px,1fr);
+  overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  scrollbar-width:none;-ms-overflow-style:none}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-track > *{scroll-snap-align:start}
+.carousel-ui{display:none;align-items:center;justify-content:center;gap:14px;margin-top:22px}
+.carousel.is-ativo .carousel-ui{display:flex}
+.carousel-btn{width:40px;height:40px;flex:none;cursor:pointer;font-size:20px;line-height:1;
+  color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:50%;
+  transition:border-color .2s ease,color .2s ease,transform .2s ease}
+.carousel-btn:hover:not(:disabled){border-color:var(--gold-text);color:var(--gold-text);transform:translateY(-1px)}
+.carousel-btn:disabled{opacity:.35;cursor:default}
+.carousel-dots{display:flex;gap:8px}
+.carousel-dots button{width:8px;height:8px;padding:0;cursor:pointer;border:0;border-radius:50%;
+  background:var(--line);transition:background .2s ease,transform .2s ease}
+.carousel-dots button[aria-current='true']{background:var(--gold-text);transform:scale(1.35)}
+/* em ecrã estreito, um cartão de cada vez, para o encaixe ser claro */
+@media(max-width:760px){
+  .carousel-track{grid-auto-columns:86%;gap:0}
+}
+@media(prefers-reduced-motion:reduce){
+  .carousel-track{scroll-behavior:auto}
+  .carousel-btn,.carousel-dots button{transition:none}
+}
+
+/* pontos-chave do hero */
+.hero-points{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.hero-points li{display:grid;gap:3px;padding-left:16px;border-left:2px solid var(--gold2)}
+.hero-points strong{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2)}
+.hero-points span{font-size:17px;color:#cad5de}
+@media(max-width:950px){.hero-points{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.hero-points{grid-template-columns:1fr}}
+
+/* ── Formulário ──────────────────────────────────────────────────────── */
+.form{display:grid;gap:16px;margin:28px 0 24px;max-width:560px}
+.form-row{display:grid;gap:16px;grid-template-columns:1fr 1fr}
+.form label{display:grid;gap:6px;font-size:12px;font-weight:800;letter-spacing:.11em;
+  text-transform:uppercase;color:#fff}
+.form input,.form select,.form textarea{font:inherit;font-size:16px;padding:12px 14px;
+  color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.26);
+  border-radius:4px;text-transform:none;letter-spacing:normal}
+.form select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#d8b663 50%),
+  linear-gradient(135deg,#d8b663 50%,transparent 50%);
+  background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;
+  background-size:6px 6px,6px 6px;background-repeat:no-repeat;padding-right:42px}
+.form select option{color:var(--ink);background:#fff}
+.form :focus-visible{outline:2px solid var(--gold2);outline-offset:1px;border-color:var(--gold2)}
+.form .btn{justify-self:start;cursor:pointer}
+.form .btn:disabled{opacity:.6;cursor:default}
+.form-msg{margin:0;font-size:16px;color:#cad6df;min-height:1.2em}
+.form-msg.is-ok{color:var(--gold2);font-weight:700}
+.form-msg.is-err{color:#ffb4a8}
+.form-note{margin:0;font-size:14px;color:#9eb0bf}
+@media(max-width:560px){.form-row{grid-template-columns:1fr}}
+
+/* ── Movimento ───────────────────────────────────────────────────────────
+   Tudo o que se segue é decoração: cai por completo em
+   prefers-reduced-motion, no fim do ficheiro. */
+
+/* hero com aproximação lenta; a escala vive no :before para o degradê de
+   cima não ser esticado com ela */
+.hero-image{overflow:hidden}
+.hero-image::before{content:"";position:absolute;inset:0;
+  background:inherit;background-size:cover;background-position:center;
+  animation:hero-zoom 26s ease-out forwards}
+@keyframes hero-zoom{from{transform:scale(1)}to{transform:scale(1.08)}}
+
+/* indicador de scroll */
+.hero-cue{position:absolute;z-index:2;left:50%;bottom:26px;translate:-50% 0;
+  width:26px;height:42px;border:1px solid rgba(255,255,255,.5);border-radius:14px;
+  display:grid;justify-items:center;padding-top:8px;transition:border-color .25s ease}
+.hero-cue:hover{border-color:var(--gold2)}
+.hero-cue span{width:3px;height:8px;border-radius:2px;background:var(--gold2);
+  animation:cue 1.9s cubic-bezier(.45,0,.35,1) infinite}
+@keyframes cue{0%{opacity:0;transform:translateY(-4px)}
+  35%{opacity:1}70%,100%{opacity:0;transform:translateY(14px)}}
+
+/* barra de progresso de leitura */
+.read-bar{position:absolute;left:0;bottom:-1px;height:2px;width:0;border-radius:0 2px 2px 0;
+  background:linear-gradient(90deg,var(--gold-text),var(--gold2));transition:width .1s linear}
+
+/* elevação nos cartões */
+.feature,.network-card,.step{transition:transform .3s cubic-bezier(.2,.8,.2,1),
+  box-shadow .3s ease,border-color .3s ease,background .3s ease}
+.feature:hover,.network-card:hover,.step:hover{transform:translateY(-4px);
+  background:#fff;box-shadow:0 16px 34px rgba(7,31,59,.1)}
+.feature:hover .check{background:var(--gold-text);color:#fff}
+.check{transition:background .25s ease,color .25s ease}
+.network-card:hover .num,.step:hover .step-number{color:var(--navy)}
+.network-card .num,.step-number{transition:color .25s ease}
+
+/* o cartão do preço ganha relevo ao entrar */
+.price-card{box-shadow:0 20px 50px rgba(4,22,43,.16);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease}
+.price-card:hover{transform:translateY(-3px);box-shadow:0 26px 60px rgba(4,22,43,.24)}
+.price [data-contar]{font-variant-numeric:tabular-nums}
+
+/* FAQ com sinal de abrir e fechar */
+.faq-list summary{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;
+  list-style:none;transition:color .2s ease}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary:hover{color:var(--gold-text)}
+.faq-list summary::after{content:"+";flex:none;width:24px;text-align:center;
+  font-size:22px;line-height:1;font-weight:400;color:var(--gold-text);
+  transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.faq-list details[open] summary::after{transform:rotate(45deg)}
+.faq-list details[open] summary{color:var(--navy)}
+.faq-list p{animation:faq-abrir .3s ease}
+@keyframes faq-abrir{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+@media(prefers-reduced-motion:reduce){
+  .hero-image::before{animation:none}
+  .hero-cue span{animation:none;opacity:1}
+  .read-bar{transition:none}
+  .feature,.network-card,.step,.price-card,.check,.faq-list summary::after{transition:none}
+  .feature:hover,.network-card:hover,.step:hover,.price-card:hover{transform:none}
+  .faq-list p{animation:none}
+}
